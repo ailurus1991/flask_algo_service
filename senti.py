@@ -3,7 +3,7 @@ import os
 #  from matplotlib import pyplot,pylab as plt
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory,jsonify
 import numpy as np
-import cv2
+#  import cv2
 from rumor import RumorJudges, PreLoading, Add
 import Image
 import scipy
@@ -107,6 +107,7 @@ def upload():
       		small = scipy.misc.imresize(image, 0.5)
       		print(type(small))
       		return ''
+
 @senti.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(senti.config['UPLOAD_FOLDER'],
