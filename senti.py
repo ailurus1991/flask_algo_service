@@ -1,3 +1,4 @@
+# encoding:utf-8
 import goslate
 import os
 #  from matplotlib import pyplot,pylab as plt
@@ -6,7 +7,7 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 #  import cv2
 from rumor import RumorJudges, PreLoading, Add
 import Image
-import scipy
+import senseTime
 
 
 senti = Flask(__name__)
@@ -37,15 +38,22 @@ def multi():
             filenames.append(filename)
 
     file1 = uploaded_files[0]
-    file2 = uploaded_files[1]
+    file_path = './uploads/'+file1.filename
+    face_obj_list = senseTime.get_obj(senseTime.post_get(file_path))
+    print '图里有' + str(len(face_obj_list)) + '张脸'
+    for face in face_obj_list:
+        print face.gender
+        print face.age
+        print face.face_id
+
+    #  file2 = uploaded_files[1]
 
     #  img_rgb = cv2.imread('uploads/'+file1.filename)
 
     print('uploads/'+file1.filename)
 
 
-
-    print(type(img_rgb))
+    #  print(type(img_rgb))
 
     return redirect(url_for('uploaded_file',filename="tm"+filename))
 

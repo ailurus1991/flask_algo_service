@@ -1,18 +1,46 @@
 #!/usr/bin/env python
 # encoding: utf-8
-import httplib
 import requests
 import locale
+import ast
 locale.setlocale(locale.LC_ALL, 'en_US.utf8')
 
 
-files = {'file':open('./uploads/Dayi.jpg', 'rb'), 'attributes':'1', 'emotions':'1'}
-#  r = requests.post("https://v1-api.visioncloudapi.com/face/detection?api_id=fef59d1492a64b5ab5df102b8a3b6067&api_secret=cd8738e236c9470d837025ec4b3b9b6e", files = files)
+#  r = requests.post("https://v1-api.visioncloudapi.com/face/detection?api_id=fef59d1492a64b5ab5df102b8a3b6067&api_secret=cd8738e236c9470d837025ec4b3b9b6e", files = files, data=params)
 #  print r.text
+def post_get(filepath):
+    files = {'file':open(str(filepath), 'rb')}
+    params = {'emotions':'1', 'attributes':'1'}
+    r = requests.post('https://v1-api.visioncloudapi.com/face/detection?api_id=fef59d1492a64b5ab5df102b8a3b6067&api_secret=cd8738e236c9470d837025ec4b3b9b6e', files = files, data = params)
+    print r.text
+    return ast.literal_eval(r.text)
 
-t_dict = {"image_id":"e79f991126774040a0dbc138d9d2df58","width":960,"height":1280,"faces":[{"face_id":"bfaa077b15b2431a9e2221025b9bd3c6","rect":{"left":349,"top":876,"right":446,"bottom":973},"eye_dist":44,"landmarks21":[[362.23584,890.813599],[374.964142,888.284058],[388.167847,891.754761],[411.33017,892.237671],[424.532928,888.596863],[437.129089,891.163147],[368.337189,902.322083],[386.109436,903.33429],[412.840729,903.833374],[430.551605,902.30957],[387.78244,932.226929],[398.872498,936.556335],[409.940369,932.764709],[397.91156,947.270264],[398.011658,952.785278],[398.052795,959.779724],[377.445251,901.669189],[421.685486,901.754089],[398.667603,928.171387],[383.156189,951.4021],[411.638763,952.030884]]},{"face_id":"8a658e6de3b341149e2c7f25da3c8f11","rect":{"left":331,"top":180,"right":853,"bottom":702},"eye_dist":242,"landmarks21":[[404.335114,253.022736],[472.393555,252.289276],[540.24054,272.08844],[654.136719,273.811188],[727.34198,257.756439],[795.880249,261.115967],[427.52771,310.769989],[523.42334,319.463379],[667.985962,320.308258],[765.676941,313.037323],[525.80304,477.62326],[595.791443,507.556702],[668.504639,477.466248],[596.24939,568.475525],[597.000122,594.111206],[598.167664,625.677734],[473.344727,312.856415],[715.481201,314.548462],[592.884705,466.718262],[509.369446,578.100952],[689.707397,578.87146]]}],"status":"OK"}
-image_id = t_dict['image_id']
-faces = t_dict['faces']
-for face in faces:
-    print face['face_id']
-    print face['eye_dist']
+
+class Face(object):
+    def __init__(self, face_id, ract, attributes, emotions, eye_dist):
+        self.face_id = face_id
+        self.ract = ract
+        #  self.attributes = attributes
+        #  self.emotions = emotions
+        self.eye_dist = eye_dist
+        self.age = attributes['age']
+        self.gender = attributes['gender']
+        self.attractive =  attributes['attractive']
+        self.smile = attributes['smile']
+        self.angry = emotions['angry']
+        self.calm = emotions['calm']
+        self.disgust = emotions['disgust']
+        self.happy = emotions['happy']
+        self.sad = emotions['sad']
+        self.surprised = emotions['surprised']
+        self.confused = emotions['confused']
+        self.squint = emotions['squint']
+        self.screaming = emotions['screaming']
+        self.scared = emotions['scared']
+
+def get_obj(r_text):
+    face_obj_list = []
+    for face in r_text['faces']:
+        current_face = Face(face['face_id'], face['rect'], face['attributes'], face['emotions'], face['eye_dist'])
+        face_obj_list.append(current_face)
+    return face_obj_list
