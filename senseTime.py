@@ -22,6 +22,8 @@ class Face(object):
         self.ract = ract
         #  self.attributes = attributes
         #  self.emotions = emotions
+        self.attributes = attributes
+        self.emotions = emotions
         self.eye_dist = eye_dist
         self.age = attributes['age']
         self.gender = attributes['gender']

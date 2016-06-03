@@ -162,7 +162,7 @@
 				            <br/>
 				            <br/>
                     <div id="picWrap"></div>
-                    <iframe id="picRes" name="featureDetection" width=850 height=400 frameBorder=0></iframe>
+                    <iframe id="picRes" name="featureDetection" width=850 height=400 frameBorder=0 style="display:none"></iframe>
 				        </div>
           </div>
 
@@ -225,9 +225,10 @@
           $('#picSub').click(function () {
             $('#picRes').bind('load', function () {
                 window.ifm = $(this);
-                data = $.parseJSON($iframe.contents().text());
+                var data
+                data = $.parseJSON($('#picRes').contents().text());
                 console.log(data);
-                showRect($('#picWrap'), {}, 'picUrl');
+                showRect($('#picWrap'), data, data.path);
 
                 $(this).unbind();
             })

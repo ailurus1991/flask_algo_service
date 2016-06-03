@@ -9,6 +9,7 @@ from rumor import RumorJudges, PreLoading, Add
 import Image
 import senseTime
 
+import json
 
 senti = Flask(__name__)
 senti.config['UPLOAD_FOLDER'] = 'uploads/'
@@ -40,24 +41,34 @@ def multi():
     file1 = uploaded_files[0]
     file_path = './uploads/'+file1.filename
     face_obj_list = senseTime.get_obj(senseTime.post_get(file_path))
-    print '图里有' + str(len(face_obj_list)) + '张脸'
-    for face in face_obj_list:
-        print face.gender
-        print face.age
-        print face.face_id
+#    print '图里有' + str(len(face_obj_list)) + '张脸'
+#    for face in face_obj_list:
+#        print face.gender
+#        print face.age
+#        print face.face_id
 
     #  file2 = uploaded_files[1]
 
     #  img_rgb = cv2.imread('uploads/'+file1.filename)
 
-    print('uploads/'+file1.filename)
+    #  print('uploads/'+file1.filename)
+    face_infos = []
+    for face_obj in face_obj_list:
+        face_rect = face_obj.ract
+        face_attributes =  face_obj.attributes
+        face_emotions = face_obj.emotions
+        d = {"rect":face_rect, "face_attributes":face_attributes, "face_emotions":face_emotions}
+        face_infos.append(d)
+
 
 
     #  print(type(img_rgb))
     return_dict = {}
     return_dict['file_path'] = file_path
     return_dict['face_dict'] = face_obj_list
-    return return_dict
+    #return jsonify({"path":file_path, "rect":face_rect, "face_attributes":face_attributes, "face_emtions":face_emtions})# + face_infos
+    print json.dumps({"path":file_path, "faces":face_infos})
+    return json.dumps({"path":file_path, "faces":face_infos})
 
     #  return redirect(url_for('uploaded_file',filename="tm"+filename))
 

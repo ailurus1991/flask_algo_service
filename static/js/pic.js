@@ -11,16 +11,17 @@ $(function () {
         var img = new Image();
 
         img.onload = function () {
-            console.log(data)
-            if(data && data.status === 'OK') {
-                $container.html('<img src="' + imgSrc + '" width="' + data.width + '" height="' + data.height + '">');
-            } else {
-                alert('data error');
-                return;
-            }
+            // console.log(data)
+            // var data = {}
+            // data.rect = JSON.parse(data_raw.rect)
+            // var data.face_emotions = JSON.parse(data_raw.rect)
+            // var data.face_attributes = JSON.parse(data_raw.attributes)
+            // var data.rect = JSON.parse(data_raw.rect)
+            $container.html('<img src="' + imgSrc + '" width="' + data.width + '" height="' + data.height + '">');
 
             data.faces && data.faces.map(function (face, i) {
-                var $rect = $('<div id="ract_' + i + '"></div>');
+            // var face = data
+                var $rect = $('<div id="ract_' + 0 + '"></div>');
                 var $attr = $('<ul></ul>');
                 var $emot = $('<ul></ul>');
                 var propStr = '';
@@ -40,18 +41,18 @@ $(function () {
                 $attr.css(ulCss)
                 $emot.css(ulCss)
 
-                face.attributes && Object.keys(face.attributes).map(function (attrKey, i) {
+                face.face_attributes && Object.keys(face.face_attributes).map(function (attrKey, i) {
                     var $li = $('<li></li>');
 
-                    $li.text(attrKey + ' :  ' + face.attributes[attrKey]);
+                    $li.text(attrKey + ' :  ' + face.face_attributes[attrKey]);
 
                     $attr.append($li);
                 })
 
-                face.emotions && Object.keys(face.emotions).map(function (attrKey, i) {
+                face.face_emotions && Object.keys(face.face_emotions).map(function (attrKey, i) {
                     var $li = $('<li></li>');
 
-                    $li.text(attrKey + ' :  ' + face.emotions[attrKey]);
+                    $li.text(attrKey + ' :  ' + face.face_emotions[attrKey]);
 
                     $emot.append($li);
                 })
@@ -67,5 +68,5 @@ $(function () {
     }
 
     window.showRect = showRect;
-    showRect($('.container'), data, './30.pic_hd.jpg');
+    // showRect($('.container'), data, './30.pic_hd.jpg');
 });
