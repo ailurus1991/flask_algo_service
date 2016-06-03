@@ -54,8 +54,12 @@ def multi():
 
 
     #  print(type(img_rgb))
+    return_dict = {}
+    return_dict['file_path'] = file_path
+    return_dict['face_dict'] = face_obj_list
+    return return_dict
 
-    return redirect(url_for('uploaded_file',filename="tm"+filename))
+    #  return redirect(url_for('uploaded_file',filename="tm"+filename))
 
 
 @senti.route('/upload', methods=['POST'])
