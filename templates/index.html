@@ -154,7 +154,7 @@
 				        <div class="col-md-3 no-float">
 		   <form action="multi" method="post" enctype="multipart/form-data" target="featureDetection">
             <input type="file" multiple="" name="file[]" class="filestyle" data-input="false"><br /><br/>
-            <input type="submit" value="Detect Feature"  class="btn btn-default btn-success">
+            <input id="picSub" type="submit" value="Detect Feature"  class="btn btn-default btn-success">
          </form>
 
          </div>
@@ -162,7 +162,7 @@
 				            <br/>
 				            <br/>
                     <div id="picWrap"></div>
-                        <iframe name="featureDetection" width=850 height=400 frameBorder=0></iframe>
+                    <iframe id="picRes" name="featureDetection" width=850 height=400 frameBorder=0></iframe>
 				        </div>
           </div>
 
@@ -222,42 +222,17 @@
       <script>
 
         $(function () {
-          var xhr = new XMLHttpRequest(),
-              file = $('#filestyle-1')[0].files[0],
-              formData = new FormData(),
-              state, summary,
-              uploadBtnName = 'img';
+          $('#picSub').click(function () {
+            $('#picRes').bind('load', function () {
+                window.ifm = $(this);
+                data = $.parseJSON($iframe.contents().text());
+                console.log(data);
+                showRect($('#picWrap'), {}, 'picUrl');
 
-          xhr.onreadystatechange = function(e) {
-              if (xhr.readyState == 4) {
-                  var data;
-                  data = xhr.responseText;
-                  try {
-                      data = $.parseJSON(data);
-                  } catch(e) {
-                      data = {};
-                      data[_option.errorCodeKey] = _option.defaultErrorCode;
-                  }
-
-                  showRect($('#picWrap'), data, 'picUrl');
-
-              }
-          };
-          xhr.open('POST', _option.uploadUrl, true);
-          xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-          xhr.setRequestHeader("Cache-Control", "no-cache");
-          // append data
-          getToken();
-          formData.append(_option.uploadBtnName, file);
-          formData.append('token', image_token.token);
-
-          timeoutInterval = setTimeout(function() {
-              timeoutInterval = null;
-              isTimeout = true;
-          },_option.timeout);
-          xhr.send(formData);
-
-          // showRect($('#picWrap'), 'data', 'picUrl');
+                $(this).unbind();
+            })
+            
+          })
         });
       </script>
     	<script type="text/javascript">
