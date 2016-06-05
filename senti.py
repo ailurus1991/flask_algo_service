@@ -61,8 +61,11 @@ def multi():
         face_id_list.append(face_obj.face_id)
         d = {"face_id": face_id, "rect":face_rect, "face_attributes":face_attributes, "face_emotions":face_emotions}
         face_infos.append(d)
-
-    verification = senseTime.get_verification(senseTime.verify(face_id_list[0], face_id_list[1]))
+    if len(face_id_list) < 2:
+        verification = {"same_person":"Only one face detected"}
+        return json.dumps({"path":file_path, "faces":face_infos, "verification":verification})
+    else:
+        verification = senseTime.get_verification(senseTime.verify(face_id_list[0], face_id_list[1]))
 
 
     #  print(type(img_rgb))
@@ -72,7 +75,8 @@ def multi():
     #return jsonify({"path":file_path, "rect":face_rect, "face_attributes":face_attributes, "face_emtions":face_emtions})# + face_infos
     print '---------------'
     print json.dumps({"path":file_path, "faces":face_infos, "verification":verification})
-    return json.dumps({"path":file_path, "faces":face_infos})
+    #  return json.dumps({"path":file_path, "faces":face_infos})
+    return json.dumps({"path":file_path, "faces":face_infos, "verification":verification})
 
     #  return redirect(url_for('uploaded_file',filename="tm"+filename))
 
