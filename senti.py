@@ -39,7 +39,9 @@ def multi():
             filenames.append(filename)
 
     file1 = uploaded_files[0]
+
     file_path = './uploads/'+file1.filename
+
     face_obj_list = senseTime.get_obj(senseTime.post_get(file_path))
 #    print '图里有' + str(len(face_obj_list)) + '张脸'
 #    for face in face_obj_list:
@@ -53,13 +55,17 @@ def multi():
 
     #  print('uploads/'+file1.filename)
     face_infos = []
+    face_id_list = []
     for face_obj in face_obj_list:
+        face_id = face_obj.face_id
         face_rect = face_obj.ract
         face_attributes =  face_obj.attributes
         face_emotions = face_obj.emotions
-        d = {"rect":face_rect, "face_attributes":face_attributes, "face_emotions":face_emotions}
+        face_id_list.append(face_obj.face_id)
+        d = {"face_id": face_id, "rect":face_rect, "face_attributes":face_attributes, "face_emotions":face_emotions}
         face_infos.append(d)
 
+    verification = senseTime.get_verification(senseTime.verify(face_id_list[0], face_id_list[1]))
 
 
     #  print(type(img_rgb))
@@ -67,7 +73,8 @@ def multi():
     return_dict['file_path'] = file_path
     return_dict['face_dict'] = face_obj_list
     #return jsonify({"path":file_path, "rect":face_rect, "face_attributes":face_attributes, "face_emtions":face_emtions})# + face_infos
-    print json.dumps({"path":file_path, "faces":face_infos})
+    print '---------------'
+    print json.dumps({"path":file_path, "faces":face_infos, "verification":verification})
     return json.dumps({"path":file_path, "faces":face_infos})
 
     #  return redirect(url_for('uploaded_file',filename="tm"+filename))
