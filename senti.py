@@ -1,12 +1,9 @@
 # encoding:utf-8
-import goslate
 import os
 #  from matplotlib import pyplot,pylab as plt
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory,jsonify
-#  import numpy as np
-#  import cv2
-from rumor import RumorJudges, PreLoading, Add
-import Image
+#  from rumor import RumorJudges, PreLoading, Add
+#  import Image
 import senseTime
 
 import json
@@ -19,7 +16,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in senti.config['ALLOWED_EXTENSIONS']
 
-clf = PreLoading()
+#  clf = PreLoading()
 @senti.route('/')
 @senti.route('/index')
 def index():
@@ -158,13 +155,6 @@ def sentiment(message):
     response = {'polarity' : text.polarity , 'subjectivity' : text.subjectivity}
     return jsonify(response)
 
-
-@senti.route('/translate')
-def translate():
-    textVal = request.args.get('textVal', 0, type=str)
-    langVal = request.args.get('langVal', 0, type=str)
-    gs = goslate.Goslate()
-    return jsonify(result=gs.translate(textVal,langVal))
 
 if __name__ == "__main__":
     senti.run('0.0.0.0', debug=True, port=1111)
