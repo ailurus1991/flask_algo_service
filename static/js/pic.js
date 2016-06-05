@@ -19,16 +19,6 @@ $(function () {
             // var data.rect = JSON.parse(data_raw.rect)
             $container.html('<img src="' + imgSrc + '" width="' + data.width + '" height="' + data.height + '">');
 
-            if (data.verification) {
-                var $verification = $('<div>same_person: ' + data.verification.same_person + ', confidence: ' + data.verification.data.verification. + '</div>');
-                $verification.css({
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0
-                })
-                $container.append($verification);
-            }
-
             data.faces && data.faces.map(function (face, i) {
             // var face = data
                 var $rect = $('<div id="ract_' + 0 + '"></div>');
@@ -42,8 +32,7 @@ $(function () {
                     left: face.rect.left,
                     width: face.rect.right - face.rect.left + 'px',
                     height: face.rect.bottom - face.rect.top + 'px',
-                    background: 'rgba(0, 0, 0, .3)',
-                    white-space: nowrap;
+                    background: 'rgba(0, 0, 0, .3)'
                 })
 
                 var ulCss = {
